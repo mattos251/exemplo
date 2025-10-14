@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Promoção Exclusiva — Demo (apenas cliente)</title>
+  <style>
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #0b1220;
+      --card: #fff;
+      --accent: #ff004f;
+      --accent-2: #ff8a00;
+      --glow: rgba(255, 0, 79, 0.18);
+      --danger: #ff2e2e;
+      --muted: #6b7280;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      color: #fff
+    }
+
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .ad {
+      width: 100%;
+      max-width: 920px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    /* top ribbon */
+    .ribbon {
+      position: absolute;
+      left: -60px;
+      top: 18px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      padding: 10px 80px;
+      font-weight: 800;
+      transform: rotate(-16deg);
+      box-shadow: 0 10px 30px rgba(255, 138, 0, 0.18)
+    }
+
+    .headline {
+      display: flex;
+      align-items: center;
+      gap: 18px
+    }
+
+    .badge {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 6px 30px var(--glow)
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.5px
+    }
+
+    p.lead {
+      margin: 6px 0 0 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px
+    }
+
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 18px;
+      margin-top: 18px
+    }
+
+    /* left panel (info) */
+    .panel {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.02));
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.03)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      min-height: 48px;
+      word-break: break-word
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: inherit;
+      font-size: 13px;
+      color: #fff
+    }
+
+    /* right panel (ad content) */
+    .adside {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch
+    }
+
+    .offer {
+      background: linear-gradient(90deg, #111827, rgba(255, 255, 255, 0.02));
+      padding: 16px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.03);
+      text-align: center
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 6px 0
+    }
+
+    .cta {
+      display: block;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 900;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 12px 40px rgba(255, 0, 79, 0.18);
+      transform: translateY(0);
+      transition: transform .12s
+    }
+
+    .cta:hover {
+      transform: translateY(-3px)
+    }
+
+    .tiny {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8)
+    }
+
+    /* flashing border to mimic scammy ad */
+    .ad::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      padding: 2px;
+      background: conic-gradient(from 120deg, rgba(255, 0, 79, 0.06), rgba(255, 138, 0, 0.06), rgba(255, 0, 79, 0.06));
+      -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+      mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+      pointer-events: none;
+      animation: glow 3s linear infinite
+    }
+
+    @keyframes glow {
+      0% {
+        filter: hue-rotate(0deg)
+      }
+
+      50% {
+        filter: hue-rotate(40deg)
+      }
+
+      100% {
+        filter: hue-rotate(0deg)
+      }
+    }
+
+    /* countdown */
+    .count {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      font-weight: 800
+    }
+
+    .count .seg {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.04)
+    }
+
+    /* small print and disclaimer */
+    .disclaimer {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 12px
+    }
+
+    /* small responsive tweaks */
+    @media(max-width:880px) {
+      .cols {
+        grid-template-columns: 1fr
+      }
+
+      .ad {
+        padding: 16px
+      }
+
+      .ribbon {
+        left: -40px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="ad" role="main" aria-labelledby="title">
+      <div class="ribbon">URGENTE</div>
+      <div class="headline">
+        <div class="badge">OFERTA LIMITADA</div>
+        <div>
+          <h1 id="title">Ganhe acesso VIP AGORA — Oferta exclusiva!</h1>
+          <p class="lead">Clique e veja as informações do seu dispositivo + ganhe um bônus instantâneo. (Demo)</p>
+        </div>
+      </div>
+
+      <div class="cols">
+        <div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="tiny">Informações coletadas (somente navegador)</div>
+            <div class="tiny">Coleta segura — demo</div>
+          </div>
+
+          <div class="grid" id="result" aria-live="polite" style="margin-top:12px;">
+            <div class="box"><strong>IP público</strong>
+              <div id="ip">—</div>
+            </div>
+            <div class="box"><strong>Fuso / Timezone</strong>
+              <div id="tz">—</div>
+            </div>
+
+            <div class="box"><strong>User-Agent</strong>
+              <pre id="ua">—</pre>
+            </div>
+            <div class="box"><strong>Navigator.platform</strong>
+              <div id="platform">—</div>
+            </div>
+
+            <div class="box"><strong>User-Agent Data</strong>
+              <pre id="uadata">—</pre>
+            </div>
+            <div class="box"><strong>Língua</strong>
+              <div id="lang">—</div>
+            </div>
+
+            <div class="box"><strong>Resolução (screen)</strong>
+              <div id="screen">—</div>
+            </div>
+            <div class="box"><strong>Viewport (window.inner)</strong>
+              <div id="viewport">—</div>
+            </div>
+
+            <div class="box"><strong>Conexão</strong>
+              <pre id="connection">—</pre>
+            </div>
+            <div class="box"><strong>Bateria</strong>
+              <pre id="battery">—</pre>
+            </div>
+
+            <div class="box" style="grid-column:1/-1"><strong>Geolocalização</strong>
+              <pre id="geo">—</pre>
+            </div>
+            <div class="box" style="grid-column:1/-1"><strong>Objeto completo (JSON)</strong>
+              <pre id="all">—</pre>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="adside">
+          <div class="offer">
+            <div class="tiny">Oferta termina em</div>
+            <div class="count" id="countdown">
+              <div class="seg" id="c-min">00</div>
+              <div class="seg" id="c-sec">00</div>
+            </div>
+            <div class="price">R$ 0,99 <span style="font-size:12px;font-weight:600">(APENAS HOJE)</span></div>
+            <button id="btn" class="cta" aria-describedby="note">GANHE AGORA</button>
+            <div class="disclaimer" id="note"><strong>Atenção:</strong> Esta aparência é propositalmente parecida com
+              anúncios fraudulentos para uso em demonstração/educação. Não use para enganar pessoas.</div>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:space-between">
+            <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center">✔
+              Testemunhos</div>
+            <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center">🔒
+              Garantia</div>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Countdown simples (2 minutos)
+    const end = Date.now() + 2 * 60 * 1000;
+    const updCountdown = () => {
+      const rem = Math.max(0, end - Date.now());
+      const m = String(Math.floor(rem / 60000)).padStart(2, '0');
+      const s = String(Math.floor((rem % 60000) / 1000)).padStart(2, '0');
+      document.getElementById('c-min').innerText = m;
+      document.getElementById('c-sec').innerText = s;
+    };
+    setInterval(updCountdown, 250);
+    updCountdown();
+
+    // Reuso do seu script original (simplificado)
+    const btn = document.getElementById('btn');
+    const setStatus = (s) => { };
+    const showField = (id, value) => { const el = document.getElementById(id); if (!el) return; if (typeof value === 'object') el.innerText = JSON.stringify(value, null, 2); else el.innerText = value == null ? '—' : String(value); };
+
+    async function fetchPublicIP() { try { const res = await fetch('https://api.ipify.org?format=json'); if (!res.ok) return '—'; const j = await res.json(); return j.ip || '—' } catch (e) { return '—' } }
+    async function tryGetBattery() { if (navigator.getBattery) try { const b = await navigator.getBattery(); return { charging: b.charging, level: b.level } } catch (e) { return '—' } return '—' }
+    async function tryGetGeo() { if (!('geolocation' in navigator)) return '—'; return new Promise((resolve) => { navigator.geolocation.getCurrentPosition(pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }), err => resolve({ error: err && err.code ? ('code ' + err.code) : String(err) }), { timeout: 8000 }) }) }
+
+    async function collectInfo() {
+      btn.disabled = true; try {
+        const ua = navigator.userAgent || null;
+        const platform = navigator.platform || null;
+        const lang = navigator.language || (navigator.languages && navigator.languages[0]) || null;
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || null;
+        const screenInfo = { width: screen.width, height: screen.height };
+        const viewport = { innerWidth: window.innerWidth, innerHeight: window.innerHeight };
+        const connection = (navigator.connection && typeof navigator.connection === 'object') ? { effectiveType: navigator.connection.effectiveType } : '—';
+        const uadata = navigator.userAgentData ? { mobile: navigator.userAgentData.mobile, platform: navigator.userAgentData.platform, brands: navigator.userAgentData.brands || navigator.userAgentData.uaList } : '—';
+        const ip = await fetchPublicIP();
+        const battery = await tryGetBattery();
+        const geo = await tryGetGeo();
+        const all = { ip, ua, uadata, platform, lang, timezone: tz, screen: screenInfo, viewport, connection, battery, geo, timestamp: new Date().toISOString() };
+
+        showField('ip', ip); showField('tz', tz); showField('ua', ua); showField('platform', platform); showField('uadata', uadata); showField('lang', lang); showField('screen', `${screenInfo.width} x ${screenInfo.height}`); showField('viewport', `${viewport.innerWidth} x ${viewport.innerHeight}`); showField('connection', connection); showField('battery', battery); showField('geo', geo); showField('all', all);
+      } catch (e) { } finally { btn.disabled = false }
+    }
+
+    btn.addEventListener('click', collectInfo);
+  </script>
+</body>
+
+</html>
