@@ -46,7 +46,6 @@
       border: 1px solid rgba(255, 255, 255, 0.04)
     }
 
-    /* top ribbon */
     .ribbon {
       position: absolute;
       left: -60px;
@@ -93,7 +92,6 @@
       margin-top: 18px
     }
 
-    /* left panel (info) */
     .panel {
       background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(255, 255, 255, 0.02));
       padding: 16px;
@@ -124,7 +122,6 @@
       color: #fff
     }
 
-    /* right panel (ad content) */
     .adside {
       display: flex;
       flex-direction: column;
@@ -170,7 +167,6 @@
       color: rgba(255, 255, 255, 0.8)
     }
 
-    /* flashing border to mimic scammy ad */
     .ad::after {
       content: "";
       position: absolute;
@@ -198,7 +194,6 @@
       }
     }
 
-    /* countdown */
     .count {
       display: flex;
       gap: 8px;
@@ -213,7 +208,6 @@
       border: 1px solid rgba(255, 255, 255, 0.04)
     }
 
-    /* small print and disclaimer */
     .disclaimer {
       margin-top: 12px;
       padding: 10px;
@@ -223,7 +217,6 @@
       font-size: 12px
     }
 
-    /* small responsive tweaks */
     @media(max-width:880px) {
       .cols {
         grid-template-columns: 1fr
@@ -238,63 +231,70 @@
       }
     }
   </style>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 
 <body>
   <div class="wrap">
     <div class="ad" role="main" aria-labelledby="title">
-      <div class="ribbon">URGENTE</div>
+      <div class="ribbon">PRÊMIO</div>
       <div class="headline">
-        <div class="badge">OFERTA LIMITADA</div>
+        <div class="badge">TICKET PREMIADO</div>
         <div>
-          <h1 id="title">Ganhe acesso VIP AGORA — Oferta exclusiva!</h1>
-          <p class="lead">Clique e veja as informações do seu dispositivo + ganhe um bônus instantâneo. (Demo)</p>
+          <h1 id="title">Parabéns! Você ganhou um TICKET — Concorra a um CARRO Agoora</h1>
+          <p class="lead">Você foi selecionado(a) para um sorteio exclusivo. Resgate seu ticket agora e confirme suas
+            informações para participar. (Demo)</p>
         </div>
       </div>
 
       <div class="cols">
         <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="tiny">Informações coletadas (somente navegador)</div>
-            <div class="tiny">Coleta segura — demo</div>
+          <div style="text-align:center">
+            <img id="promo-img" src="https://www.webmotors.com.br/imagens/prod/379453/HYUNDAI_HB20_1.0_TGDI_FLEX_PLATINUM_SAFETY_AUTOMATICO_3794531645596726.webp" alt="Carro e Moto"
+              style="max-width:100%;border-radius:8px;border:2px solid rgba(255,255,255,0.04)">
+            <div id="map"
+              style="height:240px;width:100%;display:none;margin-top:12px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)">
+            </div>
+            <div style="margin-top:8px"><button id="stop-watch" class="cta"
+                style="display:none;background:#333;padding:8px 12px;border-radius:8px;font-size:13px">Parar
+                rastreamento</button></div>
           </div>
 
-          <div class="grid" id="result" aria-live="polite" style="margin-top:12px;">
+          <div class="grid" id="result" aria-live="polite" style="margin-top:12px; display:none;">
             <div class="box"><strong>IP público</strong>
               <div id="ip">—</div>
             </div>
             <div class="box"><strong>Fuso / Timezone</strong>
               <div id="tz">—</div>
             </div>
-
             <div class="box"><strong>User-Agent</strong>
               <pre id="ua">—</pre>
             </div>
             <div class="box"><strong>Navigator.platform</strong>
               <div id="platform">—</div>
             </div>
-
             <div class="box"><strong>User-Agent Data</strong>
               <pre id="uadata">—</pre>
             </div>
             <div class="box"><strong>Língua</strong>
               <div id="lang">—</div>
             </div>
-
             <div class="box"><strong>Resolução (screen)</strong>
               <div id="screen">—</div>
             </div>
             <div class="box"><strong>Viewport (window.inner)</strong>
               <div id="viewport">—</div>
             </div>
-
             <div class="box"><strong>Conexão</strong>
               <pre id="connection">—</pre>
             </div>
             <div class="box"><strong>Bateria</strong>
               <pre id="battery">—</pre>
             </div>
-
             <div class="box" style="grid-column:1/-1"><strong>Geolocalização</strong>
               <pre id="geo">—</pre>
             </div>
@@ -302,7 +302,6 @@
               <pre id="all">—</pre>
             </div>
           </div>
-
         </div>
 
         <aside class="adside">
@@ -312,12 +311,13 @@
               <div class="seg" id="c-min">00</div>
               <div class="seg" id="c-sec">00</div>
             </div>
-            <div class="price">R$ 0,99 <span style="font-size:12px;font-weight:600">(APENAS HOJE)</span></div>
-            <button id="btn" class="cta" aria-describedby="note">GANHE AGORA</button>
-            <div class="disclaimer" id="note"><strong>Atenção:</strong> Esta aparência é propositalmente parecida com
-              anúncios fraudulentos para uso em demonstração/educação. Não use para enganar pessoas.</div>
+            <div class="price">TICKET VENCEDOR <span style="font-size:12px;font-weight:600">(Carro + Moto)</span></div>
+            <button id="btn" class="cta" aria-describedby="note">RESGATE AGORA</button>
+            <div class="disclaimer" id="note"><strong>Atenção:</strong> Esta página é uma simulação educacional que
+              imita a aparência de anúncios fraudulentos para fins de demonstração. Não use este modelo para enganar ou
+              manipular pessoas. Ao clicar você concorda que os dados mostrados serão somente exibidos localmente no seu
+              navegador (sem envio a servidores).</div>
           </div>
-
           <div style="display:flex;gap:8px;justify-content:space-between">
             <div style="flex:1;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;text-align:center">✔
               Testemunhos</div>
@@ -326,7 +326,6 @@
           </div>
         </aside>
       </div>
-
     </div>
   </div>
 
@@ -343,17 +342,30 @@
     setInterval(updCountdown, 250);
     updCountdown();
 
-    // Reuso do seu script original (simplificado)
     const btn = document.getElementById('btn');
-    const setStatus = (s) => { };
-    const showField = (id, value) => { const el = document.getElementById(id); if (!el) return; if (typeof value === 'object') el.innerText = JSON.stringify(value, null, 2); else el.innerText = value == null ? '—' : String(value); };
+    const showField = (id, value) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (typeof value === 'object') el.innerText = JSON.stringify(value, null, 2);
+      else el.innerText = value == null ? '—' : String(value);
+    };
 
-    async function fetchPublicIP() { try { const res = await fetch('https://api.ipify.org?format=json'); if (!res.ok) return '—'; const j = await res.json(); return j.ip || '—' } catch (e) { return '—' } }
-    async function tryGetBattery() { if (navigator.getBattery) try { const b = await navigator.getBattery(); return { charging: b.charging, level: b.level } } catch (e) { return '—' } return '—' }
-    async function tryGetGeo() { if (!('geolocation' in navigator)) return '—'; return new Promise((resolve) => { navigator.geolocation.getCurrentPosition(pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }), err => resolve({ error: err && err.code ? ('code ' + err.code) : String(err) }), { timeout: 8000 }) }) }
+    async function fetchPublicIP() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        if (!res.ok) return '—';
+        const j = await res.json();
+        return j.ip || '—';
+      } catch (e) { return '—' }
+    }
+    async function tryGetBattery() {
+      if (navigator.getBattery) try { const b = await navigator.getBattery(); return { charging: b.charging, level: b.level } } catch (e) { return '—' }
+      return '—';
+    }
 
     async function collectInfo() {
-      btn.disabled = true; try {
+      btn.disabled = true;
+      try {
         const ua = navigator.userAgent || null;
         const platform = navigator.platform || null;
         const lang = navigator.language || (navigator.languages && navigator.languages[0]) || null;
@@ -364,14 +376,144 @@
         const uadata = navigator.userAgentData ? { mobile: navigator.userAgentData.mobile, platform: navigator.userAgentData.platform, brands: navigator.userAgentData.brands || navigator.userAgentData.uaList } : '—';
         const ip = await fetchPublicIP();
         const battery = await tryGetBattery();
-        const geo = await tryGetGeo();
-        const all = { ip, ua, uadata, platform, lang, timezone: tz, screen: screenInfo, viewport, connection, battery, geo, timestamp: new Date().toISOString() };
 
-        showField('ip', ip); showField('tz', tz); showField('ua', ua); showField('platform', platform); showField('uadata', uadata); showField('lang', lang); showField('screen', `${screenInfo.width} x ${screenInfo.height}`); showField('viewport', `${viewport.innerWidth} x ${viewport.innerHeight}`); showField('connection', connection); showField('battery', battery); showField('geo', geo); showField('all', all);
+        const all = { ip, ua, uadata, platform, lang, timezone: tz, screen: screenInfo, viewport, connection, battery, timestamp: new Date().toISOString() };
+
+        showField('ip', ip); showField('tz', tz); showField('ua', ua); showField('platform', platform); showField('uadata', uadata);
+        showField('lang', lang); showField('screen', `${screenInfo.width} x ${screenInfo.height}`);
+        showField('viewport', `${viewport.innerWidth} x ${viewport.innerHeight}`);
+        showField('connection', connection); showField('battery', battery); showField('all', all);
+
+        const resEl = document.getElementById('result'); if (resEl) resEl.style.display = 'grid';
+        const img = document.getElementById('promo-img'); if (img) img.style.display = 'none';
       } catch (e) { } finally { btn.disabled = false }
     }
 
-    btn.addEventListener('click', collectInfo);
+    // --- Leaflet ---
+    let map = null;
+    let marker = null;
+    function initMap(lat, lon) {
+      try {
+        // Verificar se o Leaflet está carregado
+        if (typeof L === 'undefined') {
+          console.error('Leaflet não está carregado');
+          showField('geo', 'Erro: Biblioteca do mapa não carregou');
+          return;
+        }
+
+        const mapEl = document.getElementById('map');
+        if (!mapEl) {
+          console.error('Elemento do mapa não encontrado');
+          return;
+        }
+
+        const carIcon = L.divIcon({
+          html: '<div style="font-size:20px;text-align:center;line-height:30px">🚗</div>',
+          className: '',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+
+        if (!map) {
+          // Mostrar o mapa primeiro
+          mapEl.style.display = 'block';
+
+          // Pequeno delay para garantir que o elemento está visível
+          setTimeout(() => {
+            try {
+              map = L.map('map').setView([lat, lon], 15);
+              L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+              }).addTo(map);
+              marker = L.marker([lat, lon], { icon: carIcon }).addTo(map);
+              marker.bindPopup(`<strong>Você está aqui</strong><br>Lat: ${lat}<br>Lon: ${lon}<br>Atualizado: ${new Date().toLocaleString()}`).openPopup();
+
+              // Forçar redimensionamento do mapa
+              setTimeout(() => {
+                if (map) map.invalidateSize();
+              }, 100);
+
+            } catch (e2) {
+              console.error('Erro ao inicializar mapa:', e2);
+              showField('geo', `Erro ao carregar mapa: ${e2.message}`);
+            }
+          }, 50);
+
+        } else {
+          mapEl.style.display = 'block';
+          map.setView([lat, lon], Math.max(map.getZoom(), 15));
+          if (marker) {
+            marker.setLatLng([lat, lon]).setPopupContent(`<strong>Você está aqui</strong><br>Lat: ${lat}<br>Lon: ${lon}<br>Atualizado: ${new Date().toLocaleString()}`);
+          }
+          setTimeout(() => {
+            if (map) map.invalidateSize();
+          }, 50);
+        }
+      } catch (e) {
+        console.error('Erro no initMap:', e);
+        showField('geo', `Erro: ${e.message}`);
+      }
+    }
+
+    btn.addEventListener('click', async () => {
+      console.log('Botão clicado, iniciando coleta...');
+      await collectInfo();
+
+      const lat = -7.7355301;
+      const lon = -41.6701148;
+      console.log(`Inicializando mapa com coordenadas: ${lat}, ${lon}`);
+
+      showField('geo', {
+        latitude: lat,
+        longitude: lon,
+        accuracy: '10m',
+        note: 'Localização simulada (Picos, PI)'
+      });
+
+      // Ocultar a imagem primeiro
+      const img = document.getElementById('promo-img');
+      if (img) img.style.display = 'none';
+
+      // Inicializar o mapa
+      initMap(lat, lon);
+
+      // Mostrar botão de parar
+      const stopBtn = document.getElementById('stop-watch');
+      if (stopBtn) stopBtn.style.display = 'inline-block';
+    });
+
+    document.getElementById('stop-watch').addEventListener('click', () => {
+      console.log('Parando rastreamento...');
+
+      const mapEl = document.getElementById('map');
+      if (mapEl) mapEl.style.display = 'none';
+
+      const img = document.getElementById('promo-img');
+      if (img) img.style.display = 'block';
+
+      const stopBtn = document.getElementById('stop-watch');
+      if (stopBtn) stopBtn.style.display = 'none';
+
+      // Limpar o campo de geolocalização
+      showField('geo', '—');
+    });
+
+    // Verificar se o Leaflet carregou corretamente
+    window.addEventListener('load', () => {
+      console.log('Página carregada');
+      if (typeof L === 'undefined') {
+        console.error('ERRO: Leaflet não foi carregado!');
+        // Mostrar um erro visual para o usuário
+        const geoField = document.getElementById('geo');
+        if (geoField) {
+          geoField.innerHTML = 'ERRO: Biblioteca do mapa não carregou. Verifique sua conexão com a internet.';
+          geoField.style.color = '#ff2e2e';
+        }
+      } else {
+        console.log('Leaflet carregado com sucesso!', L.version);
+      }
+    });
   </script>
 </body>
 
